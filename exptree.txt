@@ -1,0 +1,99 @@
+#include <iostream>
+#include <stack>
+#include <cctype>
+
+struct TreeNode {
+    char data;
+    TreeNode* left; // Fixed the typo in left
+    TreeNode* right;
+    TreeNode(char d) : data(d), left(nullptr), right(nullptr) {}
+};
+
+bool isOperator(char c) {
+    return (c == '+' || c == '-' || c == '*' || c == '/');
+}
+
+TreeNode* constructPostfixExpressionTree(const std::string& postfix) { // Fixed the typo in postfix
+    std::stack<TreeNode*> stack;
+    for (char c : postfix) {
+        if (std::isalnum(c)) {
+            stack.push(new TreeNode(c));
+        } else if (isOperator(c)) {
+            TreeNode* right = stack.top();
+            stack.pop();
+            TreeNode* left = stack.top();
+            stack.pop();
+            TreeNode* newNode = new TreeNode(c);
+            newNode->left = left; // Fixed the typo in left
+            newNode->right = right;
+            stack.push(newNode);
+        }
+    }
+    return stack.top();
+}
+
+// Function to perform a non-recursive in-order traversal
+void nonRecursiveInOrder(TreeNode* root) {
+    std::stack<TreeNode*> stack;
+    TreeNode* current = root;
+    while (current || !stack.empty()) {
+        while (current) {
+            stack.push(current);
+            current = current->left; // Fixed the typo in left
+        }
+        current = stack.top();
+        stack.pop();
+        std::cout << current->data << " ";
+        current = current->right;
+    }
+}
+
+// Function to perform a non-recursive pre-order traversal
+void nonRecursivePreOrder(TreeNode* root) {
+    if (!root) return;
+    std::stack<TreeNode*> stack;
+    stack.push(root);
+    while (!stack.empty()) {
+        TreeNode* current = stack.top();
+        stack.pop();
+        std::cout << current->data << " ";
+        if (current->right) stack.push(current->right);
+        if (current->left) stack.push(current->left); // Fixed the typo in left
+    }
+}
+
+// Function to perform a non-recursive post-order traversal
+void nonRecursivePostOrder(TreeNode* root) {
+    std::stack<TreeNode*> stack1, stack2;
+    stack1.push(root);
+    while (!stack1.empty()) {
+        TreeNode* current = stack1.top();
+        stack1.pop();
+        stack2.push(current);
+        if (current->left) stack1.push(current->left); // Fixed the typo in left
+        if (current->right) stack1.push(current->right);
+    }
+    while (!stack2.empty()) {
+        std::cout << stack2.top()->data << " ";
+        stack2.pop();
+    }
+}
+
+int main() {
+    std::string postfixExpression = "ab+ef*g*-";
+    TreeNode* postfixTree = constructPostfixExpressionTree(postfixExpression);
+
+    std::cout << "Non-Recursive In-Order Traversal: ";
+    nonRecursiveInOrder(postfixTree);
+    std::cout << "\n";
+
+    std::cout << "Non-Recursive Pre-Order Traversal: ";
+    nonRecursivePreOrder(postfixTree);
+    std::cout << "\n";
+
+    std::cout << "Non-Recursive Post-Order Traversal: ";
+    nonRecursivePostOrder(postfixTree);
+    std::cout << "\n";
+
+    return 0;
+}
