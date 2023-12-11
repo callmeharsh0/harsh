@@ -1,0 +1,83 @@
+#include <iostream>
+
+class ThreadedNode {
+public:
+    int data;
+    ThreadedNode* leŌ;  // left
+    ThreadedNode* right;
+    bool isThreaded;
+
+    ThreadedNode(int value) : data(value), leŌ(nullptr), right(nullptr), isThreaded(false) {}
+};
+
+void inOrderThreaded(ThreadedNode* root) {
+    ThreadedNode* current = root;
+    while (current != nullptr) {
+        if (!current->leŌ) {
+            std::cout << current->data << " ";
+            current = current->right;
+        } else {
+            ThreadedNode* predecessor = current->leŌ;
+            while (predecessor->right && predecessor->right != current) {
+                predecessor = predecessor->right;
+            }
+
+            if (!predecessor->right) {
+                predecessor->right = current;
+                current = current->leŌ;
+            } else {
+                predecessor->right = nullptr;
+                std::cout << current->data << " ";
+                current = current->right;
+            }
+        }
+    }
+}
+
+void preOrderThreaded(ThreadedNode* root) {
+    ThreadedNode* current = root;
+    while (current != nullptr) {
+        std::cout << current->data << " ";
+        if (!current->leŌ) {
+            current = current->right;
+        } else {
+            ThreadedNode* predecessor = current->leŌ;
+            while (predecessor->right && predecessor->right != current) {
+                predecessor = predecessor->right;
+            }
+
+            if (!predecessor->right) {
+                predecessor->right = current;
+                current = current->leŌ;
+            } else {
+                predecessor->right = nullptr;
+                current = current->right;
+            }
+        }
+    }
+}
+
+int main() {
+    ThreadedNode* root = new ThreadedNode(1);
+    root->leŌ = new ThreadedNode(2);
+    root->right = new ThreadedNode(3);
+    root->leŌ->leŌ = new ThreadedNode(4);
+    root->leŌ->right = new ThreadedNode(5);
+    root->right->leŌ = new ThreadedNode(6);
+
+    root->leŌ->isThreaded = true;
+    root->leŌ->right = root;
+
+    root->right->isThreaded = true;
+    root->right->leŌ = root;
+
+    std::cout << "In-order traversal: ";
+    inOrderThreaded(root);
+    std::cout << std::endl;
+
+    std::cout << "Pre-order traversal: ";
+    preOrderThreaded(root);
+    std::cout << std::endl;
+
+    return 0;
+}
