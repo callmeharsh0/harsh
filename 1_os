@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main() {
+    // echo
+    printf("Hello, world!\n");
+
+    // ls
+    system("ls");
+
+    // read
+    char name[50];
+    printf("Enter your name: ");
+    scanf("%s", name);
+    printf("Hello, %s!\n", name);
+
+    // cat
+    FILE *file = fopen("example.txt", "r");
+    if (file != NULL) {
+        char line[100];
+        printf("Contents of example.txt:\n");
+        while (fgets(line, sizeof(line), file)) {
+            printf("%s", line);
+        }
+        fclose(file);
+    } else {
+        printf("example.txt not found.\n");
+    }
+
+    // touch
+    system("touch newfile.txt");
+
+    // test
+    if (access("newfile.txt", F_OK) != -1) {
+        printf("newfile.txt exists.\n");
+    } else {
+        printf("newfile.txt does not exist.\n");
+    }
+
+    // arithmetic comparison
+    int x = 5, y = 10;
+    if (x < y) {
+        printf("%d is less than %d.\n", x, y);
+    } else {
+        printf("%d is not less than %d.\n", x, y);
+    }
+
+    // conditional loops
+    int i;
+    for (i = 0; i < 5; i++) {
+        if (i % 2 == 0) {
+            printf("%d is even.\n", i);
+        } else {
+            printf("%d is odd.\n", i);
+        }
+    }
+
+    // grep
+    system("grep 'hello' example.txt");
+
+    // sed
+    system("sed 's/world/universe/' example.txt");
+
+    return 0;
+}
