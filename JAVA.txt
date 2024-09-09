@@ -2,3 +2,9 @@ apt-cache search openjdk
 sudo apt install openjdk-21-jre openjdk-21-jdk
 java --version
 mkdir oop
+
+    class Simple{  
+        public static void main(String args[]){  
+         System.out.println("Hello Java");  
+        }  
+    }  
